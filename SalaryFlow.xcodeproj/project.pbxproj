@@ -1,0 +1,563 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		CBCFFB412F8EAECC00D693AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBCFFB2B2F8EAEC800D693AB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBCFFB322F8EAEC800D693AB;
+			remoteInfo = SalaryFlow;
+		};
+		CBCFFB4B2F8EAECC00D693AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBCFFB2B2F8EAEC800D693AB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBCFFB322F8EAEC800D693AB;
+			remoteInfo = SalaryFlow;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CBCFFB332F8EAEC800D693AB /* SalaryFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SalaryFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBCFFB402F8EAECC00D693AB /* SalaryFlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SalaryFlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBCFFB4A2F8EAECC00D693AB /* SalaryFlowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SalaryFlowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		CBCFFB352F8EAEC800D693AB /* SalaryFlow */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SalaryFlow;
+			sourceTree = "<group>";
+		};
+		CBCFFB432F8EAECC00D693AB /* SalaryFlowTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SalaryFlowTests;
+			sourceTree = "<group>";
+		};
+		CBCFFB4D2F8EAECC00D693AB /* SalaryFlowUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SalaryFlowUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CBCFFB302F8EAEC800D693AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBCFFB3D2F8EAECC00D693AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBCFFB472F8EAECC00D693AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CBCFFB2A2F8EAEC800D693AB = {
+			isa = PBXGroup;
+			children = (
+				CBCFFB352F8EAEC800D693AB /* SalaryFlow */,
+				CBCFFB432F8EAECC00D693AB /* SalaryFlowTests */,
+				CBCFFB4D2F8EAECC00D693AB /* SalaryFlowUITests */,
+				CBCFFB342F8EAEC800D693AB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CBCFFB342F8EAEC800D693AB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CBCFFB332F8EAEC800D693AB /* SalaryFlow.app */,
+				CBCFFB402F8EAECC00D693AB /* SalaryFlowTests.xctest */,
+				CBCFFB4A2F8EAECC00D693AB /* SalaryFlowUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CBCFFB322F8EAEC800D693AB /* SalaryFlow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBCFFB542F8EAECC00D693AB /* Build configuration list for PBXNativeTarget "SalaryFlow" */;
+			buildPhases = (
+				CBCFFB2F2F8EAEC800D693AB /* Sources */,
+				CBCFFB302F8EAEC800D693AB /* Frameworks */,
+				CBCFFB312F8EAEC800D693AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CBCFFB352F8EAEC800D693AB /* SalaryFlow */,
+			);
+			name = SalaryFlow;
+			packageProductDependencies = (
+			);
+			productName = SalaryFlow;
+			productReference = CBCFFB332F8EAEC800D693AB /* SalaryFlow.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CBCFFB3F2F8EAECC00D693AB /* SalaryFlowTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBCFFB572F8EAECC00D693AB /* Build configuration list for PBXNativeTarget "SalaryFlowTests" */;
+			buildPhases = (
+				CBCFFB3C2F8EAECC00D693AB /* Sources */,
+				CBCFFB3D2F8EAECC00D693AB /* Frameworks */,
+				CBCFFB3E2F8EAECC00D693AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CBCFFB422F8EAECC00D693AB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CBCFFB432F8EAECC00D693AB /* SalaryFlowTests */,
+			);
+			name = SalaryFlowTests;
+			packageProductDependencies = (
+			);
+			productName = SalaryFlowTests;
+			productReference = CBCFFB402F8EAECC00D693AB /* SalaryFlowTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CBCFFB492F8EAECC00D693AB /* SalaryFlowUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBCFFB5A2F8EAECC00D693AB /* Build configuration list for PBXNativeTarget "SalaryFlowUITests" */;
+			buildPhases = (
+				CBCFFB462F8EAECC00D693AB /* Sources */,
+				CBCFFB472F8EAECC00D693AB /* Frameworks */,
+				CBCFFB482F8EAECC00D693AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CBCFFB4C2F8EAECC00D693AB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CBCFFB4D2F8EAECC00D693AB /* SalaryFlowUITests */,
+			);
+			name = SalaryFlowUITests;
+			packageProductDependencies = (
+			);
+			productName = SalaryFlowUITests;
+			productReference = CBCFFB4A2F8EAECC00D693AB /* SalaryFlowUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CBCFFB2B2F8EAEC800D693AB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					CBCFFB322F8EAEC800D693AB = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					CBCFFB3F2F8EAECC00D693AB = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = CBCFFB322F8EAEC800D693AB;
+					};
+					CBCFFB492F8EAECC00D693AB = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = CBCFFB322F8EAEC800D693AB;
+					};
+				};
+			};
+			buildConfigurationList = CBCFFB2E2F8EAEC800D693AB /* Build configuration list for PBXProject "SalaryFlow" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CBCFFB2A2F8EAEC800D693AB;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CBCFFB342F8EAEC800D693AB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CBCFFB322F8EAEC800D693AB /* SalaryFlow */,
+				CBCFFB3F2F8EAECC00D693AB /* SalaryFlowTests */,
+				CBCFFB492F8EAECC00D693AB /* SalaryFlowUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CBCFFB312F8EAEC800D693AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBCFFB3E2F8EAECC00D693AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBCFFB482F8EAECC00D693AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CBCFFB2F2F8EAEC800D693AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBCFFB3C2F8EAECC00D693AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBCFFB462F8EAECC00D693AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CBCFFB422F8EAECC00D693AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBCFFB322F8EAEC800D693AB /* SalaryFlow */;
+			targetProxy = CBCFFB412F8EAECC00D693AB /* PBXContainerItemProxy */;
+		};
+		CBCFFB4C2F8EAECC00D693AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBCFFB322F8EAEC800D693AB /* SalaryFlow */;
+			targetProxy = CBCFFB4B2F8EAECC00D693AB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		CBCFFB522F8EAECC00D693AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 4585Y56SQ7;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CBCFFB532F8EAECC00D693AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4585Y56SQ7;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CBCFFB552F8EAECC00D693AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4585Y56SQ7;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.osito.SalaryFlow;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CBCFFB562F8EAECC00D693AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4585Y56SQ7;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.osito.SalaryFlow;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CBCFFB582F8EAECC00D693AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4585Y56SQ7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.osito.SalaryFlowTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SalaryFlow.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SalaryFlow";
+			};
+			name = Debug;
+		};
+		CBCFFB592F8EAECC00D693AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4585Y56SQ7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.osito.SalaryFlowTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SalaryFlow.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SalaryFlow";
+			};
+			name = Release;
+		};
+		CBCFFB5B2F8EAECC00D693AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4585Y56SQ7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.osito.SalaryFlowUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SalaryFlow;
+			};
+			name = Debug;
+		};
+		CBCFFB5C2F8EAECC00D693AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4585Y56SQ7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.osito.SalaryFlowUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SalaryFlow;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CBCFFB2E2F8EAEC800D693AB /* Build configuration list for PBXProject "SalaryFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBCFFB522F8EAECC00D693AB /* Debug */,
+				CBCFFB532F8EAECC00D693AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CBCFFB542F8EAECC00D693AB /* Build configuration list for PBXNativeTarget "SalaryFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBCFFB552F8EAECC00D693AB /* Debug */,
+				CBCFFB562F8EAECC00D693AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CBCFFB572F8EAECC00D693AB /* Build configuration list for PBXNativeTarget "SalaryFlowTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBCFFB582F8EAECC00D693AB /* Debug */,
+				CBCFFB592F8EAECC00D693AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CBCFFB5A2F8EAECC00D693AB /* Build configuration list for PBXNativeTarget "SalaryFlowUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBCFFB5B2F8EAECC00D693AB /* Debug */,
+				CBCFFB5C2F8EAECC00D693AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CBCFFB2B2F8EAEC800D693AB /* Project object */;
+}
