@@ -1,16 +1,10 @@
-//
-//  SalaryFlowApp.swift
-//  SalaryFlow
-//
-//  Created by 许倩 on 2026/4/15.
-//
-
 import SwiftUI
 
 @main
 struct SalaryFlowApp: App {
+    @StateObject private var authManager = AuthManager()
+
     init() {
-        // 顶部导航栏
         let navColor = UIColor(
             red: 0.39,
             green: 0.35,
@@ -46,7 +40,6 @@ struct SalaryFlowApp: App {
 
         UINavigationBar.appearance().tintColor = navTitleColor
 
-        // 底部 TabBar
         let tabColor = UIColor(
             red: 0.39,
             green: 0.35,
@@ -115,7 +108,9 @@ struct SalaryFlowApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AuthenticatedRootView(userId: authManager.activeStorageUserId)
+                .environmentObject(authManager)
+                .id(authManager.activeStorageUserId)
         }
     }
 }

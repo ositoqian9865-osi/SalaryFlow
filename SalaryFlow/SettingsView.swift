@@ -47,7 +47,7 @@ struct SettingsView: View {
                     Button("完成") {
                         dismiss()
                     }
-                    .foregroundStyle(AppTheme.textPrimary)
+                    .foregroundStyle(.white)
                 }
             }
             .sheet(isPresented: $showTimePicker) {
@@ -82,7 +82,7 @@ struct SettingsView: View {
                             Button("完成") {
                                 showTimePicker = false
                             }
-                            .foregroundStyle(AppTheme.textPrimary)
+                            .foregroundStyle(.white)
                         }
                     }
                 }

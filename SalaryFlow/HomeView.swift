@@ -7,6 +7,7 @@ struct HomeView: View {
     @State private var showAddCountdownSheet = false
     @State private var showAddTodoSheet = false
     @State private var showAddIncomeSheet = false
+    @State private var toastMessage: String?
 
     @State private var newCountdownTitle = ""
     @State private var newCountdownDate = Date()
@@ -29,6 +30,18 @@ struct HomeView: View {
                 .padding(.horizontal, 18)
                 .padding(.top, 14)
                 .padding(.bottom, 28)
+            }
+        }
+        .overlay(alignment: .top) {
+            if let toastMessage {
+                Text(toastMessage)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(AppTheme.textPrimary)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(.ultraThinMaterial, in: Capsule())
+                    .padding(.top, 10)
+                    .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
         .sheet(isPresented: $showSettingsSheet, onDismiss: {
@@ -58,6 +71,7 @@ struct HomeView: View {
                 Text("SalaryFlow")
                     .font(.system(size: 30, weight: .bold, design: .rounded))
                     .foregroundStyle(AppTheme.textPrimary)
+
                 Text(vm.statusText())
                     .font(.subheadline)
                     .foregroundStyle(AppTheme.textSecondary)
@@ -80,7 +94,7 @@ struct HomeView: View {
     }
 
     var todayCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 6) {
             Text("今日已赚")
                 .font(.headline)
                 .foregroundStyle(Color(red: 0.36, green: 0.31, blue: 0.31))
@@ -90,51 +104,120 @@ struct HomeView: View {
                 .foregroundStyle(AppTheme.textPrimary)
                 .contentTransition(.numericText())
 
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 0) {
                 HStack {
-                    Text("今日进度")
-                        .font(.subheadline)
-                        .foregroundStyle(AppTheme.textSecondary)
-
                     Spacer()
 
                     Text("\(Int(vm.workProgress * 100))%")
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Color(red: 0.40, green: 0.46, blue: 0.74))
+                        .foregroundStyle(AppTheme.accent)
                 }
+                .padding(.bottom, -10)
 
-                ClayProgressBar(progress: vm.workProgress)
-                    .frame(height: 20)
+                runningProgressBar
+                    .frame(height: 44)
             }
+            .padding(.top, -6)
 
             Text(vm.currentPunchLabel())
                 .font(.caption.weight(.medium))
                 .foregroundStyle(AppTheme.textSecondary)
+                .padding(.top, 6)
 
             punchGrid
+                .padding(.top, 6)
         }
         .padding(22)
         .clayCard()
     }
 
+    var runningProgressBar: some View {
+        GeometryReader { geo in
+            let runnerSize: CGFloat = 170
+            let barHeight: CGFloat = 20
+            let barY: CGFloat = -48
+            let runnerY: CGFloat = -70
+            let progressWidth = max(20, geo.size.width * vm.workProgress)
+
+            ZStack(alignment: .leading) {
+                // 已走进度：主题色
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(AppTheme.accent)
+                    .frame(width: progressWidth, height: barHeight)
+                    .offset(y: barY)
+                    .zIndex(1)
+
+                // 人物
+                Group {
+                    if vm.attendanceMode == .workedHalfDay {
+                        Image("halfday_worker")
+                            .resizable()
+                            .scaledToFit()
+                    } else {
+                        Image("clockin_worker")
+                            .resizable()
+                            .scaledToFit()
+                    }
+                }
+                .frame(width: runnerSize, height: runnerSize)
+                .offset(
+                    x: max(0, (geo.size.width - runnerSize) * vm.workProgress),
+                    y: runnerY
+                )
+                .zIndex(2)
+                .animation(.spring(duration: 0.35), value: vm.workProgress)
+
+                // 底轨
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(Color.white.opacity(0.9))
+                    .frame(height: barHeight)
+                    .offset(y: barY)
+                    .zIndex(3)
+            }
+        }
+    }
+
     var punchGrid: some View {
         VStack(spacing: 10) {
             HStack(spacing: 10) {
-                punchImageCard(imageName: "clockin_worker", fallbackEmoji: "👩🏻‍💻", title: "开工啦", active: vm.attendanceMode == .working) {
+                punchImageCard(
+                    imageName: "clockin_worker",
+                    fallbackEmoji: "👩🏻‍💻",
+                    title: "开工啦",
+                    active: vm.attendanceMode == .working
+                ) {
                     vm.punchIn()
                 }
 
-                punchImageCard(imageName: "clockout_home", fallbackEmoji: "🧺", title: "收工啦", active: vm.attendanceMode == .finished) {
-                    vm.punchOut()
+                punchImageCard(
+                    imageName: "clockout_home",
+                    fallbackEmoji: "🧺",
+                    title: "收工啦",
+                    active: vm.attendanceMode == .finished,
+                    enabled: vm.attendanceMode == .working || vm.attendanceMode == .workedHalfDay,
+                    dimmed: !vm.canPunchOut() && (vm.attendanceMode == .working || vm.attendanceMode == .workedHalfDay)
+                ) {
+                    let message = vm.punchOut() ?? "还没下班哦～"
+                    showToast(message)
                 }
             }
 
             HStack(spacing: 10) {
-                punchImageCard(imageName: "offday_rest", fallbackEmoji: "☁️", title: "不上班", active: vm.attendanceMode == .offDay) {
+                punchImageCard(
+                    imageName: "offday_rest",
+                    fallbackEmoji: "☁️",
+                    title: "不上班",
+                    active: vm.attendanceMode == .offDay
+                ) {
                     vm.markOffToday()
                 }
 
-                punchImageCard(imageName: "halfday_worker", fallbackEmoji: "🫶🏻", title: "半天哦", active: vm.attendanceMode == .workedHalfDay) {
+                punchImageCard(
+                    imageName: "halfday_worker",
+                    fallbackEmoji: "🫶🏻",
+                    title: "半天哦",
+                    active: vm.attendanceMode == .workedHalfDay
+                ) {
                     vm.markHalfDay()
                 }
             }
@@ -142,7 +225,15 @@ struct HomeView: View {
     }
 
     @ViewBuilder
-    func punchImageCard(imageName: String, fallbackEmoji: String, title: String, active: Bool, action: @escaping () -> Void) -> some View {
+    func punchImageCard(
+        imageName: String,
+        fallbackEmoji: String,
+        title: String,
+        active: Bool,
+        enabled: Bool = true,
+        dimmed: Bool = false,
+        action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
             VStack(spacing: 8) {
                 ZStack {
@@ -185,9 +276,11 @@ struct HomeView: View {
             )
             .shadow(color: .white.opacity(0.78), radius: 4, x: -2, y: -2)
             .shadow(color: Color.black.opacity(0.07), radius: 5, x: 3, y: 3)
+            .opacity(dimmed ? 0.45 : 1.0)
             .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
         .buttonStyle(.plain)
+        .disabled(!enabled)
     }
 
     var vaultCard: some View {
@@ -284,6 +377,7 @@ struct HomeView: View {
                     HStack(spacing: 10) {
                         Button {
                             vm.toggleTodo(id: todo.id)
+                            vm.upsertTodayReviewRecord()
                         } label: {
                             Image(systemName: todo.isDone ? "checkmark.circle" : "circle")
                                 .font(.system(size: 19))
@@ -299,6 +393,7 @@ struct HomeView: View {
 
                         Button {
                             vm.removeTodo(id: todo.id)
+                            vm.upsertTodayReviewRecord()
                         } label: {
                             Image(systemName: "minus.circle")
                                 .font(.system(size: 19))
@@ -318,7 +413,7 @@ struct HomeView: View {
     var countdownCard: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("倒计时")
+                Text("把重要的日子放眼前")
                     .font(.headline)
                     .foregroundStyle(Color(red: 0.36, green: 0.31, blue: 0.31))
 
@@ -341,14 +436,22 @@ struct HomeView: View {
                     .foregroundStyle(AppTheme.textSecondary)
             } else {
                 ForEach(vm.widgetCountdowns) { item in
+                    let dayOffset = vm.daysUntil(item.targetDate)
+
                     HStack(spacing: 12) {
                         RoundedRectangle(cornerRadius: 14, style: .continuous)
                             .fill(Color(red: 0.97, green: 0.93, blue: 0.88))
-                            .frame(width: 46, height: 46)
+                            .frame(width: 56, height: 56)
                             .overlay(
-                                Text("\(max(vm.daysUntil(item.targetDate), 0))")
-                                    .font(.headline.weight(.bold))
-                                    .foregroundStyle(Color(red: 0.62, green: 0.46, blue: 0.32))
+                                VStack(spacing: 2) {
+                                    Text("\(abs(dayOffset))")
+                                        .font(.headline.weight(.bold))
+                                        .foregroundStyle(Color(red: 0.62, green: 0.46, blue: 0.32))
+
+                                    Text(dayOffset >= 0 ? "天后" : "天前")
+                                        .font(.caption2)
+                                        .foregroundStyle(AppTheme.textSecondary)
+                                }
                             )
 
                         VStack(alignment: .leading, spacing: 4) {
@@ -362,7 +465,7 @@ struct HomeView: View {
 
                         Spacer()
 
-                        Text("还有 \(max(vm.daysUntil(item.targetDate), 0)) 天")
+                        Text(dayOffset >= 0 ? "还有 \(dayOffset) 天" : "已经 \(abs(dayOffset)) 天")
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(AppTheme.textSecondary)
                     }
@@ -428,6 +531,7 @@ struct HomeView: View {
                         let trimmed = newTodoTitle.trimmingCharacters(in: .whitespacesAndNewlines)
                         if !trimmed.isEmpty {
                             vm.addTodo(title: trimmed)
+                            vm.upsertTodayReviewRecord()
                             newTodoTitle = ""
                             showAddTodoSheet = false
                         }
@@ -472,5 +576,19 @@ struct HomeView: View {
             }
         }
         .presentationDetents([.medium])
+    }
+
+    func showToast(_ message: String) {
+        withAnimation(.spring(duration: 0.3)) {
+            toastMessage = message
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            if toastMessage == message {
+                withAnimation(.spring(duration: 0.3)) {
+                    toastMessage = nil
+                }
+            }
+        }
     }
 }

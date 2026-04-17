@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var vm = AppViewModel()
+    @EnvironmentObject var vm: AppViewModel
+    @EnvironmentObject var authManager: AuthManager
+
     private let timer = Timer.publish(every: 1.0 / 30.0, on: .main, in: .common).autoconnect()
 
     var body: some View {
@@ -31,10 +33,11 @@ struct ContentView: View {
                     Label("倒计时", systemImage: "clock")
                 }
 
-            ReviewView()
+            ProfileView()
                 .environmentObject(vm)
+                .environmentObject(authManager)
                 .tabItem {
-                    Label("复盘", systemImage: "list.bullet.rectangle")
+                    Label("我的", systemImage: "person")
                 }
         }
         .onReceive(timer) { _ in
@@ -45,4 +48,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(AppViewModel(userId: "preview_user"))
+        .environmentObject(AuthManager())
 }

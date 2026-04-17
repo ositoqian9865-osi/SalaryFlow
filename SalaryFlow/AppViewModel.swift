@@ -9,21 +9,23 @@ import SwiftUI
 import Foundation
 
 final class AppViewModel: ObservableObject {
-    private enum StorageKey {
-        static let settings = "sf.settings"
-        static let vaultBaseAmount = "sf.vaultBaseAmount"
-        static let goals = "sf.goals"
-        static let goalRecords = "sf.goalRecords"
-        static let todos = "sf.todos"
-        static let dailyTodoRecords = "sf.dailyTodoRecords"
-        static let countdowns = "sf.countdowns"
-        static let manualIncomeRecords = "sf.manualIncomeRecords"
-        static let attendanceMode = "sf.attendanceMode"
-        static let clockInTime = "sf.clockInTime"
-        static let clockOutTime = "sf.clockOutTime"
-        static let archivedDayKey = "sf.archivedDayKey"
-        static let lastInitialVaultAmount = "sf.lastInitialVaultAmount"
+    private enum StorageName {
+        static let settings = "settings"
+        static let vaultBaseAmount = "vaultBaseAmount"
+        static let goals = "goals"
+        static let goalRecords = "goalRecords"
+        static let todos = "todos"
+        static let dailyTodoRecords = "dailyTodoRecords"
+        static let countdowns = "countdowns"
+        static let manualIncomeRecords = "manualIncomeRecords"
+        static let attendanceMode = "attendanceMode"
+        static let clockInTime = "clockInTime"
+        static let clockOutTime = "clockOutTime"
+        static let archivedDayKey = "archivedDayKey"
+        static let lastInitialVaultAmount = "lastInitialVaultAmount"
     }
+
+    private let userId: String
 
     @Published var settings = WorkSettings() {
         didSet { persistAll() }
@@ -33,30 +35,26 @@ final class AppViewModel: ObservableObject {
     @Published var workProgress: Double = 0
 
     @Published var vaultBaseAmount: Double = 248.36 {
-        didSet { saveValue(vaultBaseAmount, forKey: StorageKey.vaultBaseAmount) }
+        didSet { saveValue(vaultBaseAmount, forKey: storageKey(StorageName.vaultBaseAmount)) }
     }
 
     @Published var goals: [Goal] = [
         Goal(title: "AirPods Pro", amount: 1280),
         Goal(title: "东京机票", amount: 1669.16)
     ] {
-        didSet { saveCodable(goals, forKey: StorageKey.goals) }
+        didSet { saveCodable(goals, forKey: storageKey(StorageName.goals)) }
     }
 
     @Published var goalRecords: [GoalRecord] = [] {
-        didSet { saveCodable(goalRecords, forKey: StorageKey.goalRecords) }
+        didSet { saveCodable(goalRecords, forKey: storageKey(StorageName.goalRecords)) }
     }
 
-    @Published var todos: [TodoItem] = [
-        TodoItem(title: "回客户消息"),
-        TodoItem(title: "改课程大纲"),
-        TodoItem(title: "发会议纪要", isDone: true)
-    ] {
-        didSet { saveCodable(todos, forKey: StorageKey.todos) }
+    @Published var todos: [TodoItem] = [] {
+        didSet { saveCodable(todos, forKey: storageKey(StorageName.todos)) }
     }
 
     @Published var dailyTodoRecords: [DailyTodoRecord] = [] {
-        didSet { saveCodable(dailyTodoRecords, forKey: StorageKey.dailyTodoRecords) }
+        didSet { saveCodable(dailyTodoRecords, forKey: storageKey(StorageName.dailyTodoRecords)) }
     }
 
     @Published var countdowns: [CountdownItem] = [
@@ -73,134 +71,88 @@ final class AppViewModel: ObservableObject {
             showInWidget: true
         )
     ] {
-        didSet { saveCodable(countdowns, forKey: StorageKey.countdowns) }
+        didSet { saveCodable(countdowns, forKey: storageKey(StorageName.countdowns)) }
     }
 
     @Published var manualIncomeRecords: [ManualIncomeRecord] = [] {
-        didSet { saveCodable(manualIncomeRecords, forKey: StorageKey.manualIncomeRecords) }
+        didSet { saveCodable(manualIncomeRecords, forKey: storageKey(StorageName.manualIncomeRecords)) }
     }
 
     @Published var attendanceMode: AttendanceMode = .none {
-        didSet { saveValue(attendanceMode.rawValue, forKey: StorageKey.attendanceMode) }
+        didSet { saveValue(attendanceMode.rawValue, forKey: storageKey(StorageName.attendanceMode)) }
     }
 
     @Published var clockInTime: Date? {
-        didSet { saveDate(clockInTime, forKey: StorageKey.clockInTime) }
+        didSet { saveDate(clockInTime, forKey: storageKey(StorageName.clockInTime)) }
     }
 
     @Published var clockOutTime: Date? {
-        didSet { saveDate(clockOutTime, forKey: StorageKey.clockOutTime) }
+        didSet { saveDate(clockOutTime, forKey: storageKey(StorageName.clockOutTime)) }
     }
 
     private var archivedDayKey: String = "" {
-        didSet { saveValue(archivedDayKey, forKey: StorageKey.archivedDayKey) }
+        didSet { saveValue(archivedDayKey, forKey: storageKey(StorageName.archivedDayKey)) }
     }
 
     private var lastInitialVaultAmount: Double = 248.36 {
-        didSet { saveValue(lastInitialVaultAmount, forKey: StorageKey.lastInitialVaultAmount) }
+        didSet { saveValue(lastInitialVaultAmount, forKey: storageKey(StorageName.lastInitialVaultAmount)) }
     }
 
-    init() {
+    init(userId: String) {
+        self.userId = userId
         loadAll()
 
         if archivedDayKey.isEmpty {
             archivedDayKey = dayKey(Date())
         }
 
-        if UserDefaults.standard.object(forKey: StorageKey.vaultBaseAmount) == nil {
+        if UserDefaults.standard.object(forKey: storageKey(StorageName.vaultBaseAmount)) == nil {
             vaultBaseAmount = settings.initialVaultAmount
         }
 
-        if UserDefaults.standard.object(forKey: StorageKey.lastInitialVaultAmount) == nil {
+        if UserDefaults.standard.object(forKey: storageKey(StorageName.lastInitialVaultAmount)) == nil {
             lastInitialVaultAmount = settings.initialVaultAmount
         }
 
-        func recalculateToday(now: Date = Date()) {
-            let fullDaySeconds = max(effectiveWorkSecondsPerDay(), 1)
+        archiveIfNeeded(now: Date())
+        recalculateToday()
+        upsertTodayReviewRecord()
+    }
 
-            switch attendanceMode {
-            case .offDay:
-                todayEarned = 0
-                workProgress = 0
-
-            case .none:
-                todayEarned = 0
-                workProgress = 0
-
-            case .working, .workedHalfDay, .finished:
-                guard let clockInTime else {
-                    todayEarned = 0
-                    workProgress = 0
-                    return
-                }
-
-                let scheduleStart = scheduledStartDate(for: now)
-                let scheduleEnd = scheduledEndDate(for: now)
-
-                // 1) 金额：按真实打卡时间和工作时段重叠来算
-                let effectiveStart = maxDate(clockInTime, scheduleStart)
-                let liveEnd = clockOutTime ?? now
-                let cappedEnd = minDate(liveEnd, scheduleEnd)
-
-                if cappedEnd <= effectiveStart {
-                    todayEarned = 0
-                } else {
-                    var workedSeconds = workedSecondsBetween(start: effectiveStart, end: cappedEnd, on: now)
-
-                    if attendanceMode == .workedHalfDay {
-                        workedSeconds = min(workedSeconds, fullDaySeconds / 2.0)
-                    }
-
-                    todayEarned = max(workedSeconds * effectivePerSecondIncome(), 0)
-                }
-
-                // 2) 进度条：按设置好的工作时间轴走
-                let progressAnchor = minDate(clockOutTime ?? now, scheduleEnd)
-                var scheduleProgressSeconds = scheduledProgressWorkedSeconds(at: progressAnchor)
-
-                if attendanceMode == .workedHalfDay {
-                    scheduleProgressSeconds = min(scheduleProgressSeconds, fullDaySeconds / 2.0)
-                }
-
-                workProgress = min(max(scheduleProgressSeconds / fullDaySeconds, 0), attendanceMode == .workedHalfDay ? 0.5 : 1.0)
-            }
-        }
+    private func storageKey(_ name: String) -> String {
+        "sf.\(userId).\(name)"
     }
 
     // MARK: - Persistence
 
     private func persistAll() {
-        saveCodable(settings, forKey: StorageKey.settings)
-        saveValue(vaultBaseAmount, forKey: StorageKey.vaultBaseAmount)
-        saveCodable(goals, forKey: StorageKey.goals)
-        saveCodable(goalRecords, forKey: StorageKey.goalRecords)
-        saveCodable(todos, forKey: StorageKey.todos)
-        saveCodable(dailyTodoRecords, forKey: StorageKey.dailyTodoRecords)
-        saveCodable(countdowns, forKey: StorageKey.countdowns)
-        saveCodable(manualIncomeRecords, forKey: StorageKey.manualIncomeRecords)
-        saveValue(attendanceMode.rawValue, forKey: StorageKey.attendanceMode)
-        saveDate(clockInTime, forKey: StorageKey.clockInTime)
-        saveDate(clockOutTime, forKey: StorageKey.clockOutTime)
-        saveValue(archivedDayKey, forKey: StorageKey.archivedDayKey)
-        saveValue(lastInitialVaultAmount, forKey: StorageKey.lastInitialVaultAmount)
+        saveCodable(settings, forKey: storageKey(StorageName.settings))
+        saveValue(vaultBaseAmount, forKey: storageKey(StorageName.vaultBaseAmount))
+        saveCodable(goals, forKey: storageKey(StorageName.goals))
+        saveCodable(goalRecords, forKey: storageKey(StorageName.goalRecords))
+        saveCodable(todos, forKey: storageKey(StorageName.todos))
+        saveCodable(dailyTodoRecords, forKey: storageKey(StorageName.dailyTodoRecords))
+        saveCodable(countdowns, forKey: storageKey(StorageName.countdowns))
+        saveCodable(manualIncomeRecords, forKey: storageKey(StorageName.manualIncomeRecords))
+        saveValue(attendanceMode.rawValue, forKey: storageKey(StorageName.attendanceMode))
+        saveDate(clockInTime, forKey: storageKey(StorageName.clockInTime))
+        saveDate(clockOutTime, forKey: storageKey(StorageName.clockOutTime))
+        saveValue(archivedDayKey, forKey: storageKey(StorageName.archivedDayKey))
+        saveValue(lastInitialVaultAmount, forKey: storageKey(StorageName.lastInitialVaultAmount))
         flushDefaults()
     }
 
     private func loadAll() {
-        settings = loadCodable(WorkSettings.self, forKey: StorageKey.settings) ?? WorkSettings()
-        vaultBaseAmount = loadValue(Double.self, forKey: StorageKey.vaultBaseAmount) ?? 248.36
-        goals = loadCodable([Goal].self, forKey: StorageKey.goals) ?? [
+        settings = loadCodable(WorkSettings.self, forKey: storageKey(StorageName.settings)) ?? WorkSettings()
+        vaultBaseAmount = loadValue(Double.self, forKey: storageKey(StorageName.vaultBaseAmount)) ?? 248.36
+        goals = loadCodable([Goal].self, forKey: storageKey(StorageName.goals)) ?? [
             Goal(title: "AirPods Pro", amount: 1280),
             Goal(title: "东京机票", amount: 1669.16)
         ]
-        goalRecords = loadCodable([GoalRecord].self, forKey: StorageKey.goalRecords) ?? []
-        todos = loadCodable([TodoItem].self, forKey: StorageKey.todos) ?? [
-            TodoItem(title: "回客户消息"),
-            TodoItem(title: "改课程大纲"),
-            TodoItem(title: "发会议纪要", isDone: true)
-        ]
-        dailyTodoRecords = loadCodable([DailyTodoRecord].self, forKey: StorageKey.dailyTodoRecords) ?? []
-        countdowns = loadCodable([CountdownItem].self, forKey: StorageKey.countdowns) ?? [
+        goalRecords = loadCodable([GoalRecord].self, forKey: storageKey(StorageName.goalRecords)) ?? []
+        todos = loadCodable([TodoItem].self, forKey: storageKey(StorageName.todos)) ?? []
+        dailyTodoRecords = loadCodable([DailyTodoRecord].self, forKey: storageKey(StorageName.dailyTodoRecords)) ?? []
+        countdowns = loadCodable([CountdownItem].self, forKey: storageKey(StorageName.countdowns)) ?? [
             CountdownItem(
                 title: "发工资",
                 targetDate: Calendar.current.date(byAdding: .day, value: 6, to: Date())!,
@@ -214,19 +166,19 @@ final class AppViewModel: ObservableObject {
                 showInWidget: true
             )
         ]
-        manualIncomeRecords = loadCodable([ManualIncomeRecord].self, forKey: StorageKey.manualIncomeRecords) ?? []
+        manualIncomeRecords = loadCodable([ManualIncomeRecord].self, forKey: storageKey(StorageName.manualIncomeRecords)) ?? []
 
-        if let rawMode = loadValue(String.self, forKey: StorageKey.attendanceMode),
+        if let rawMode = loadValue(String.self, forKey: storageKey(StorageName.attendanceMode)),
            let mode = AttendanceMode(rawValue: rawMode) {
             attendanceMode = mode
         } else {
             attendanceMode = .none
         }
 
-        clockInTime = loadDate(forKey: StorageKey.clockInTime)
-        clockOutTime = loadDate(forKey: StorageKey.clockOutTime)
-        archivedDayKey = loadValue(String.self, forKey: StorageKey.archivedDayKey) ?? ""
-        lastInitialVaultAmount = loadValue(Double.self, forKey: StorageKey.lastInitialVaultAmount) ?? settings.initialVaultAmount
+        clockInTime = loadDate(forKey: storageKey(StorageName.clockInTime))
+        clockOutTime = loadDate(forKey: storageKey(StorageName.clockOutTime))
+        archivedDayKey = loadValue(String.self, forKey: storageKey(StorageName.archivedDayKey)) ?? ""
+        lastInitialVaultAmount = loadValue(Double.self, forKey: storageKey(StorageName.lastInitialVaultAmount)) ?? settings.initialVaultAmount
     }
 
     private func saveCodable<T: Codable>(_ value: T, forKey key: String) {
@@ -277,6 +229,13 @@ final class AppViewModel: ObservableObject {
             .map { $0 }
     }
 
+    var pinnedCountdown: CountdownItem? {
+        countdowns
+            .filter { $0.isPinned }
+            .sorted { $0.targetDate < $1.targetDate }
+            .first
+    }
+
     var currentVaultAmount: Double {
         max(vaultBaseAmount + todayEarned, 0)
     }
@@ -286,15 +245,19 @@ final class AppViewModel: ObservableObject {
     func tick() {
         archiveIfNeeded(now: Date())
         recalculateToday()
+        upsertTodayReviewRecord()
     }
 
     func handleSettingsUpdated() {
-        let delta = settings.initialVaultAmount - lastInitialVaultAmount
-        vaultBaseAmount += delta
-        lastInitialVaultAmount = settings.initialVaultAmount
-        recalculateToday()
-    }
+        // 如果用户改了“小金库初始金额”，就把当前小金库基底同步成这个值
+        if settings.initialVaultAmount != lastInitialVaultAmount {
+            vaultBaseAmount = settings.initialVaultAmount
+            lastInitialVaultAmount = settings.initialVaultAmount
+        }
 
+        recalculateToday()
+        upsertTodayReviewRecord()
+    }
     // MARK: - Manual Income
 
     func addManualIncome(amount: Double, note: String) {
@@ -309,6 +272,8 @@ final class AppViewModel: ObservableObject {
     // MARK: - Recalculate Today
 
     func recalculateToday(now: Date = Date()) {
+        let fullDaySeconds = max(effectiveWorkSecondsPerDay(), 1)
+
         switch attendanceMode {
         case .offDay:
             todayEarned = 0
@@ -334,21 +299,27 @@ final class AppViewModel: ObservableObject {
 
             if cappedEnd <= effectiveStart {
                 todayEarned = 0
-                workProgress = 0
-                return
+            } else {
+                var workedSeconds = workedSecondsBetween(start: effectiveStart, end: cappedEnd, on: now)
+
+                if attendanceMode == .workedHalfDay {
+                    workedSeconds = min(workedSeconds, fullDaySeconds / 2.0)
+                }
+
+                todayEarned = max(workedSeconds * effectivePerSecondIncome(), 0)
             }
 
-            let fullDaySeconds = max(effectiveWorkSecondsPerDay(), 1)
-            var workedSeconds = workedSecondsBetween(start: effectiveStart, end: cappedEnd, on: now)
+            let progressAnchor = minDate(clockOutTime ?? now, scheduleEnd)
+            var scheduleProgressSeconds = scheduledProgressWorkedSeconds(at: progressAnchor)
 
             if attendanceMode == .workedHalfDay {
-                workedSeconds = min(workedSeconds, fullDaySeconds / 2.0)
+                scheduleProgressSeconds = min(scheduleProgressSeconds, fullDaySeconds / 2.0)
             }
 
-            todayEarned = max(workedSeconds * effectivePerSecondIncome(), 0)
-
-            let rawProgress = workedSeconds / fullDaySeconds
-            workProgress = min(max(rawProgress, 0), attendanceMode == .workedHalfDay ? 0.5 : 1.0)
+            workProgress = min(
+                max(scheduleProgressSeconds / fullDaySeconds, 0),
+                attendanceMode == .workedHalfDay ? 0.5 : 1.0
+            )
         }
     }
 
@@ -361,6 +332,57 @@ final class AppViewModel: ObservableObject {
 
         return workedSecondsBetween(start: start, end: time, on: time)
     }
+
+    func earliestPunchOutDate(now: Date = Date()) -> Date? {
+        guard let clockInTime else { return nil }
+
+        if attendanceMode == .workedHalfDay {
+            return clockInTime.addingTimeInterval(effectiveWorkSecondsPerDay() / 2.0)
+        }
+
+        return scheduledEndDate(for: now)
+    }
+
+    func canPunchOut(now: Date = Date()) -> Bool {
+        guard attendanceMode == .working || attendanceMode == .workedHalfDay else { return false }
+        guard let earliest = earliestPunchOutDate(now: now) else { return false }
+        return now >= earliest
+    }
+
+    func todayWorkDurationText(now: Date = Date()) -> String {
+        guard let clockInTime else { return "今日上班 0 分钟" }
+        let end = clockOutTime ?? now
+        let seconds = max(end.timeIntervalSince(clockInTime), 0)
+        let hours = Int(seconds) / 3600
+        let minutes = (Int(seconds) % 3600) / 60
+
+        if hours > 0 {
+            return "今日上班 \(hours) 小时 \(minutes) 分钟"
+        } else {
+            return "今日上班 \(minutes) 分钟"
+        }
+    }
+
+    func upsertTodayReviewRecord(now: Date = Date()) {
+        let todayStart = Calendar.current.startOfDay(for: now)
+
+        let record = DailyTodoRecord(
+            date: now,
+            items: todos.map { TodoRecordItem(title: $0.title, isDone: $0.isDone) },
+            earnedAmount: todayEarned,
+            progress: workProgress,
+            attendanceSummary: attendanceSummary(now: now)
+        )
+
+        if let index = dailyTodoRecords.firstIndex(where: {
+            Calendar.current.isDate($0.date, inSameDayAs: todayStart)
+        }) {
+            dailyTodoRecords[index] = record
+        } else {
+            dailyTodoRecords.insert(record, at: 0)
+        }
+    }
+
     // MARK: - Punch Logic
 
     func punchIn() {
@@ -368,27 +390,45 @@ final class AppViewModel: ObservableObject {
         archiveIfNeeded(now: now)
 
         guard isWorkdayToday(now: now) else { return }
-        if attendanceMode == .offDay { return }
+
+        if attendanceMode == .offDay || attendanceMode == .workedHalfDay {
+            if clockInTime == nil {
+                clockInTime = now
+            }
+            clockOutTime = nil
+            attendanceMode = .working
+            recalculateToday(now: now)
+            upsertTodayReviewRecord(now: now)
+            return
+        }
 
         if clockInTime == nil {
             clockInTime = now
         }
 
         clockOutTime = nil
-
-        if attendanceMode != .workedHalfDay {
-            attendanceMode = .working
-        }
+        attendanceMode = .working
 
         recalculateToday(now: now)
+        upsertTodayReviewRecord(now: now)
     }
 
-    func punchOut() {
+    @discardableResult
+    func punchOut() -> String? {
         let now = Date()
-        guard attendanceMode == .working || attendanceMode == .workedHalfDay else { return }
+
+        guard attendanceMode == .working || attendanceMode == .workedHalfDay else { return nil }
+
+        guard canPunchOut(now: now) else {
+            return "还没下班哦～"
+        }
+
         clockOutTime = now
         attendanceMode = .finished
         recalculateToday(now: now)
+        upsertTodayReviewRecord(now: now)
+
+        return todayWorkDurationText(now: now)
     }
 
     func markOffToday() {
@@ -396,6 +436,7 @@ final class AppViewModel: ObservableObject {
         clockInTime = nil
         clockOutTime = nil
         recalculateToday(now: Date())
+        upsertTodayReviewRecord()
     }
 
     func markHalfDay() {
@@ -404,13 +445,26 @@ final class AppViewModel: ObservableObject {
 
         guard isWorkdayToday(now: now) else { return }
 
+        if attendanceMode == .offDay || attendanceMode == .working {
+            if clockInTime == nil {
+                clockInTime = now
+            }
+            clockOutTime = nil
+            attendanceMode = .workedHalfDay
+            recalculateToday(now: now)
+            upsertTodayReviewRecord(now: now)
+            return
+        }
+
         if clockInTime == nil {
             clockInTime = now
         }
 
         clockOutTime = nil
         attendanceMode = .workedHalfDay
+
         recalculateToday(now: now)
+        upsertTodayReviewRecord(now: now)
     }
 
     // MARK: - Backfill
@@ -427,7 +481,7 @@ final class AppViewModel: ObservableObject {
 
         switch type {
         case .normal:
-            summary = "正常上班"
+            summary = "准时上班"
             progress = 1.0
         case .late:
             summary = "迟到 \(max(lateMinutes, 0)) 分钟"
@@ -474,7 +528,7 @@ final class AppViewModel: ObservableObject {
 
             if late > 0 { return "迟到 \(late) 分钟" }
             if attendanceMode == .finished && overtime > 0 { return "加班 \(overtime) 分钟" }
-            return "正常上班"
+            return "准时上班"
         }
     }
 
@@ -598,15 +652,18 @@ final class AppViewModel: ObservableObject {
 
     func addTodo(title: String) {
         todos.append(TodoItem(title: title))
+        upsertTodayReviewRecord()
     }
 
     func removeTodo(id: UUID) {
         todos.removeAll { $0.id == id }
+        upsertTodayReviewRecord()
     }
 
     func toggleTodo(id: UUID) {
         guard let index = todos.firstIndex(where: { $0.id == id }) else { return }
         todos[index].isDone.toggle()
+        upsertTodayReviewRecord()
     }
 
     // MARK: - Countdown Logic

@@ -1,10 +1,3 @@
-//
-//  CountdownsView.swift
-//  SalaryFlow
-//
-//  Created by 许倩 on 2026/4/15.
-//
-
 import SwiftUI
 
 struct CountdownsView: View {
@@ -52,11 +45,7 @@ struct CountdownsView: View {
 
     var listCard: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("倒计时")
-                .font(.headline)
-                .foregroundStyle(AppTheme.textPrimary)
-
-            Text("把重要的日子放在眼前")
+            Text("把重要的日子放眼前")
                 .font(.subheadline)
                 .foregroundStyle(AppTheme.textSecondary)
 
@@ -65,14 +54,22 @@ struct CountdownsView: View {
                     .foregroundStyle(AppTheme.textSecondary)
             } else {
                 ForEach(vm.countdowns.sorted(by: { $0.targetDate < $1.targetDate })) { item in
+                    let dayOffset = vm.daysUntil(item.targetDate)
+
                     HStack(spacing: 12) {
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
                             .fill(Color(red: 0.97, green: 0.93, blue: 0.88))
-                            .frame(width: 56, height: 56)
+                            .frame(width: 64, height: 64)
                             .overlay(
-                                Text("\(max(vm.daysUntil(item.targetDate), 0))")
-                                    .font(.headline.bold())
-                                    .foregroundStyle(Color(red: 0.62, green: 0.46, blue: 0.32))
+                                VStack(spacing: 2) {
+                                    Text("\(abs(dayOffset))")
+                                        .font(.headline.bold())
+                                        .foregroundStyle(Color(red: 0.62, green: 0.46, blue: 0.32))
+
+                                    Text(dayOffset >= 0 ? "天后" : "天前")
+                                        .font(.caption2)
+                                        .foregroundStyle(AppTheme.textSecondary)
+                                }
                             )
 
                         VStack(alignment: .leading, spacing: 4) {
@@ -84,11 +81,9 @@ struct CountdownsView: View {
                                 .font(.caption)
                                 .foregroundStyle(AppTheme.textSecondary)
 
-                            if item.isPinned {
-                                Text("已固定到首页")
-                                    .font(.caption2)
-                                    .foregroundStyle(AppTheme.textSecondary)
-                            }
+                            Text(dayOffset >= 0 ? "还有 \(dayOffset) 天" : "已经 \(abs(dayOffset)) 天")
+                                .font(.caption)
+                                .foregroundStyle(AppTheme.textSecondary)
                         }
 
                         Spacer()
